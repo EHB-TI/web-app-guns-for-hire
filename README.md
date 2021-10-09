@@ -1,5 +1,7 @@
 # Goal
-*describe how this web app will (evantually) earn money or make the world a better place*
+*Twitch streamers spelen graag muziek af als achtergrond muziek of om stille momenten te vullen. Het probleem is dat als ze muziek afspelen dat ze kans maken om een DMCA claim te krijgen. Dit kan er voor zorgen dat jouw account wordt verwijderd.*
+
+*Om dit te vermijden willen wij een website maken dat de muziek die de streamer beluisterd via spotify toont en afspeelt via spotify voor de kijkers. De streamers moeten hun spotify en twitch account linken met hun account op onze website en daarna alleen de link delen via de stream. Ze kunnen hierdoor zonder muziek te streamen op hun twitch account de kijkers muziek van hun keuze aanbieden. De kijkers zullen alleen hun spotify account moeten linken om van de service te genieten.*
 # Acceptance criteria
 *how do we know that the goals have been reached?*
 # Threat model
