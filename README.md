@@ -30,8 +30,9 @@ Om dit te vermijden willen wij een website maken dat de muziek die de streamer b
 - [ ] Het is mogelijk om het wachtwoord te plakken (zodat gebruikers een password manager kunnen gebruiken)
 - [ ] Vaak gebruikte wachtwoorden worden geweigerd
 - [ ] De gebruiker moet bij registratie een email adres opgeven
-      &nbsp;
-      &nbsp;
+
+---
+
 - [ ] De site zal beveiligd zijn tegen allerlei aanvallen:
 
 - CSRF
@@ -67,6 +68,15 @@ Om dit te vermijden willen wij een website maken dat de muziek die de streamer b
 
 ![threat_model_ini](https://github.com/EHB-TI/web-app-guns-for-hire/blob/main/images/threat_model_ini.jpg)
 ![threat_model_api](https://github.com/EHB-TI/web-app-guns-for-hire/blob/main/images/threat_model_api.jpg)
+
+| Threat                     | Tegenmaatregel technologie | Plaats van Threat | Voorbeeld uit diagram   | Uitleg                                                                                                                                                             |
+| -------------------------- | -------------------------- | ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Spoofing**               | Auth0                      | Sign in, Sign up  | CreateAccount           | We gebruiken Auth0 om de authenticatie af te handelen. Bij deze flow wordt er een token terug gestuurd naar de api waardoor we zeker zijn van de juiste user.      |
+| **Tampering**              | JWT-tokens                 | Requesting data   | GetCurrentlyPlayingSong | We gebruiken JWT-tokens om er zeker van te zijn dat de user de correcte data kan opvragen. En dat deze tijdens het request niet aangepast kan worden.              |
+| **Repudiation**            | Logging                    | Every request     | Every process           | We gebruiken logging om vast te leggen wie welke actie gedaan heeft om de fout te kunnen traceren naar de corresponderende user.                                   |
+| **Information Disclosure** | Encryption                 | Sending data      | GetCurrentlyPlayingSong | We gebruiken encryption om er zeker van te zijn dat enkel de opvrager de data kan lezen met zijn key                                                               |
+| **Denial of Service**      | Kubernetes                 | Server            | Digital ocean droplet   | We gebruiken kubernetes om load balancing te gaan toepassen op de verschillende containers zodat er steeds meerdere instanties zijn en minder kans is op downtime. |
+| **Elevation of Privilage** | Roles                      | Express API       | GetCurrentlyPlayingSong | We maken gebruik van rollen om er zeker van te zijn dat een user enkel data kan beheren die voor zijn rol bestemd is.                                              |
 
 # Deployment
 
