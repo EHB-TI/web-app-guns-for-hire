@@ -30,7 +30,8 @@ Om dit te vermijden willen wij een website maken dat de muziek die de streamer b
 - [ ] Het is mogelijk om het wachtwoord te plakken (zodat gebruikers een password manager kunnen gebruiken)
 - [ ] Vaak gebruikte wachtwoorden worden geweigerd
 - [ ] De gebruiker moet bij registratie een email adres opgeven
-
+      &nbsp;
+      &nbsp;
 - [ ] De site zal beveiligd zijn tegen allerlei aanvallen:
 
 - CSRF
@@ -64,7 +65,8 @@ Om dit te vermijden willen wij een website maken dat de muziek die de streamer b
 
 # Threat model
 
-_describe your threat model. One or more architectural diagram expected. Also a list of the principal threats and what you will do about them_
+![threat_model_ini](https://github.com/EHB-TI/web-app-guns-for-hire/images/threat_model_ini.jpeg)
+![threat_model_api](https://github.com/EHB-TI/web-app-guns-for-hire/images/threat_model_api.jpeg)
 
 # Deployment
 
