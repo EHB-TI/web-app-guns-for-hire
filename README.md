@@ -65,8 +65,8 @@ Om dit te vermijden willen wij een website maken dat de muziek die de streamer b
 
 # Threat model
 
-![threat_model_ini](https://github.com/EHB-TI/web-app-guns-for-hire/images/threat_model_ini.jpeg)
-![threat_model_api](https://github.com/EHB-TI/web-app-guns-for-hire/images/threat_model_api.jpeg)
+![threat_model_ini](https://github.com/EHB-TI/web-app-guns-for-hire/blob/main/images/threat_model_ini.jpg)
+![threat_model_api](https://github.com/EHB-TI/web-app-guns-for-hire/blob/main/images/threat_model_api.jpg)
 
 # Deployment
 
