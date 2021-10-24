@@ -32,9 +32,7 @@ mongoose
     // app.use(cors(corsOptions)) TODO: UNCOMMENT IN PRODUCTION
     app.use(helmet())
 
-    app.get('/', (req, res) => {
-      res.send('Hello World!')
-    })
+    app.use(require('./routes/api.router'))
 
     app.listen(port, () => {
       console.log(`⚡ Server running at ${url}:${port}`)
