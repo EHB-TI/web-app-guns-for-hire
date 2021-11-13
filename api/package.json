@@ -4,8 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "start:dev": "nodemon app.js",
+    "test": "jest --config ./jest.config.json",
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,7 @@
     "mongoose": "^6.0.12"
   },
   "devDependencies": {
+    "jest": "^27.3.1",
     "nodemon": "^2.0.14"
   }
 }
