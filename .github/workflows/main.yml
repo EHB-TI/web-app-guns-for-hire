@@ -32,3 +32,9 @@ jobs:
       - name: "Run tests"
         working-directory: ./api
         run: npm test
+      - name: "Build API image"
+        working-directory: ./api
+        run: docker build . -t guns-for-hire/api
+      - name: "Build website image"
+        working-directory: ./web
+        run: docker build . -t guns-for-hire/web
