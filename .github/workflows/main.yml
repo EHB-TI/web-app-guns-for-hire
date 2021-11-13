@@ -30,4 +30,5 @@ jobs:
         working-directory: ./api
         run: npm install
       - name: "Run tests"
+        working-directory: ./api
         run: npm test
