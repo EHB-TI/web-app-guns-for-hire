@@ -2,7 +2,9 @@
 
 Twitch streamers spelen graag muziek af als achtergrond muziek of om stille momenten te vullen. Het probleem is dat als ze muziek afspelen dat ze kans maken om een DMCA claim te krijgen. Dit kan er voor zorgen dat jouw account wordt verwijderd.
 
-Om dit te vermijden willen wij een website maken dat de muziek die de streamer beluisterd via spotify toont en afspeelt via spotify voor de kijkers. De streamers moeten hun spotify en twitch account linken met hun account op onze website en daarna alleen de link delen via de stream. Ze kunnen hierdoor zonder muziek te streamen op hun twitch account de kijkers muziek van hun keuze aanbieden. De kijkers zullen alleen hun spotify account moeten linken om van de service te genieten.
+Om dit te vermijden willen wij een website maken dat de muziek die de streamer beluisterd via spotify toont en afspeelt via spotify voor de kijkers. De streamers moeten hun spotify en twitch account linken met hun account op onze website. Daarna een liedje afspelen in hun spotify, en de weblink naar hun profiel op onze site delen via de stream met de kijkers. Ze kunnen hierdoor zonder muziek te streamen op hun twitch account de kijkers muziek van hun keuze aanbieden. De kijkers zullen alleen hun spotify account moeten linken aan hun account op onze website om van de service te genieten.
+
+Hierdoor luisteren ze de muziek met hun spotify account en wordt er dus niet aan "uitzenden van muziek" gedaan door de streamer.
 
 # Acceptance criteria
 
@@ -51,13 +53,18 @@ Om dit te vermijden willen wij een website maken dat de muziek die de streamer b
 - [ ] Het application/json media type wordt aangeboden voor alle resources
 - [ ] De API zal de correcte response status codes gebruiken
 - [ ] De data, verkrijgbaar via de API, zal enkel via correcte tokens kunnen opgevraagd worden
+- [ ] De data zal enkel beschikbaar zijn van de frontend d.m.v. CORS
 
 ## Functionaliteiten
 
-- [ ] Men is verplicht om zijn/haar Spotify account na registratie te linken aan zijn/haar account.
-- [ ] Men heeft de mogelijkheid om zijn/haar Twitch account te linken aan zijn/haar account.
-- [ ] Men heeft de mogelijkheid om een streamer (waarvan zijn/haar account gelinkt is aan deze app) op te zoeken.
-- [ ] Men heeft de mogelijkheid om van een streamer (eens gevonden) de track die hij currently aan het afspelen is te beluisteren.
+- [ ] Als streamer en kijker ben ik verplicht te registreren om gebruik te kunnen maken van deze app
+- [ ] Als streamer en kijker ben ik bij de registratie verplicht om mijn Spotify account te linken aan mijn profiel op deze app
+- [ ] Als streamer en kijker ben ik verplicht in te loggen na registratie
+- [ ] Als streamer ben ik verplicht om mijn Twitch account te linken aan mijn profiel op deze app
+- [ ] Als kijker heb ik de keuze om mijn Twitch account te linken aan mijn profiel op deze app
+- [ ] Als streamer en kijker heb ik de mogelijkheid om streamers op te zoeken aan de hand van zijn/haar username van Twitch
+- [ ] Als streamer en kijker heb ik de mogelijkheid om het profiel van de gevonden streamer te bekijken
+- [ ] Als streamer en kijker heb ik de mogelijkheid om op het profiel van de gevonden streamer het lied waarnaar deze streamer aan het luisteren is af te spelen
 
 ## Permissions & rights
 
@@ -69,14 +76,14 @@ Om dit te vermijden willen wij een website maken dat de muziek die de streamer b
 ![threat_model_ini](https://github.com/EHB-TI/web-app-guns-for-hire/blob/main/images/threat_model_ini.jpg)
 ![threat_model_api](https://github.com/EHB-TI/web-app-guns-for-hire/blob/main/images/threat_model_api.jpg)
 
-| Threat                     | Tegenmaatregel technologie | Plaats van Threat | Voorbeeld uit diagram   | Uitleg                                                                                                                                                             |
-| -------------------------- | -------------------------- | ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Spoofing**               | Auth0                      | Sign in, Sign up  | CreateAccount           | We gebruiken Auth0 om de authenticatie af te handelen. Bij deze flow wordt er een token terug gestuurd naar de api waardoor we zeker zijn van de juiste user.      |
-| **Tampering**              | JWT-tokens                 | Requesting data   | GetCurrentlyPlayingSong | We gebruiken JWT-tokens om er zeker van te zijn dat de user de correcte data kan opvragen. En dat deze tijdens het request niet aangepast kan worden.              |
-| **Repudiation**            | Logging                    | Every request     | Every process           | We gebruiken logging om vast te leggen wie welke actie gedaan heeft om de fout te kunnen traceren naar de corresponderende user. (eventueel LogRocket)             |
-| **Information Disclosure** | Encryption                 | Sending data      | GetCurrentlyPlayingSong | We gebruiken encryption om er zeker van te zijn dat enkel de opvrager de data kan lezen met zijn key                                                               |
-| **Denial of Service**      | Kubernetes                 | Server            | Digital ocean droplet   | We gebruiken kubernetes om load balancing te gaan toepassen op de verschillende containers zodat er steeds meerdere instanties zijn en minder kans is op downtime. |
-| **Elevation of Privilage** | Roles                      | Express API       | GetCurrentlyPlayingSong | We maken gebruik van rollen om er zeker van te zijn dat een user enkel data kan beheren die voor zijn rol bestemd is.                                              |
+| Threat                     | Tegenmaatregel technologie | Plaats van Threat | Voorbeeld uit diagram                                     | Uitleg                                                                                                                                                             |
+| -------------------------- | -------------------------- | ----------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Spoofing**               | Auth0                      | Sign in, Sign up  | CreateAccount & Sign in                                   | We gebruiken Auth0 om de authenticatie af te handelen. Bij deze flow wordt er een token terug gestuurd naar de api waardoor we zeker zijn van de juiste user.      |
+| **Tampering**              | JWT-tokens                 | Requesting data   | GetCurrentlyPlayingSong, PlayStreamerSong, SearchStreamer | We gebruiken JWT-tokens om er zeker van te zijn dat de user de correcte data kan opvragen. En dat deze tijdens het request niet aangepast kan worden.              |
+| **Repudiation**            | Logging                    | Every request     | Every process                                             | We gebruiken logging om vast te leggen wie welke actie gedaan heeft om de fout te kunnen traceren naar de corresponderende user. (eventueel LogRocket)             |
+| **Information Disclosure** | Encryption                 | Sending data      | GetCurrentlyPlayingSong, PlayStreamerSong, SearchStreamer | We gebruiken encryption om er zeker van te zijn dat enkel de opvrager de data kan lezen met zijn key                                                               |
+| **Denial of Service**      | Kubernetes                 | Server            | Digital ocean droplet                                     | We gebruiken kubernetes om load balancing te gaan toepassen op de verschillende containers zodat er steeds meerdere instanties zijn en minder kans is op downtime. |
+| **Elevation of Privilage** | Roles                      | Express API       | GetCurrentlyPlayingSong, PlayStreamerSong, SearchStreamer | We maken gebruik van rollen om er zeker van te zijn dat een user enkel data kan beheren die voor zijn rol bestemd is.                                              |
 
 # Deployment
 
