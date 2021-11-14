@@ -2,6 +2,7 @@ version: '3'
 services:
   nodejs:
     image: guns-for-hire/api
+    container-name: twitch-radio-api
 networks:
   default:
     external: true
