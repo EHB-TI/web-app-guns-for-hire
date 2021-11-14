@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [main]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -16,25 +16,33 @@ jobs:
     runs-on: self-hosted
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    strategy: 
-        matrix:
-            node-version: [16.x]
-            
+    strategy:
+      matrix:
+        node-version: [16.x]
+
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-            node-version: ${{ matrix.node-version }}
-      - name: "Install dependencies"
+          node-version: ${{ matrix.node-version }}
+      - name: 'Install dependencies'
         working-directory: ./api
         run: npm install
-      - name: "Run tests"
+      - name: 'Run tests'
         working-directory: ./api
         run: npm test
-      - name: "Build API image"
-        working-directory: ./api
-        run: docker build . -t guns-for-hire/api
-      - name: "Build website image"
+      - name: 'Stop and remove web container'
+        run: docker stop twitch-radio-web && docker rm twitch-radio-web
+      - name: 'Stop and remove api container'
+        run: docker stop twitch-radio-api && docker rm twitch-radio-api
+      - name: 'Build website image'
         working-directory: ./web
         run: docker build . -t guns-for-hire/web
+      - name: 'Build API image'
+        working-directory: ./api
+        run: docker build . -t guns-for-hire/api
+      - name: 'Run web container'
+        run: docker run -d --network tycho_default --name twitch-radio-web guns-for-hire/web
+      - name: 'Run api container'
+        run: sudo env $(>/home/tycho/.env) docker-compose -d up
