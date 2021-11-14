@@ -34,8 +34,6 @@ jobs:
         run: npm test
       - name: 'Stop and remove web container'
         run: docker stop twitch-radio-web && docker rm twitch-radio-web
-      - name: 'Stop and remove api container'
-        run: docker stop twitch-radio-api && docker rm twitch-radio-api
       - name: 'Build website image'
         working-directory: ./web
         run: docker build . -t guns-for-hire/web
