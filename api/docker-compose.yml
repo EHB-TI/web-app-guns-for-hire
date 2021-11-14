@@ -1,7 +1,11 @@
 version: '3'
 services:
-  nodejs:
+  twitch-radio-api:
     image: guns-for-hire/api
+    environment:
+      PORT: ${PORT}
+      URL: ${URL}
+      DB_CONNECT: ${DB_CONNECT}
 networks:
   default:
     external: true
