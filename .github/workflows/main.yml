@@ -43,4 +43,5 @@ jobs:
       - name: 'Run web container'
         run: docker run -d --network tycho_default --name twitch-radio-web guns-for-hire/web
       - name: 'Run api container'
+        working-directory: ./api
         run: docker-compose --env-file /home/tycho/.env up
