@@ -10,55 +10,35 @@ Hierdoor luisteren ze de muziek met hun spotify account en wordt er dus niet aan
 
 ## Networking
 
-- [ ] HTTP requests worden geredirect naar HTTPS
-- [ ] Het gebruikte domein zal in de HSTS preload list staan
-- [ ] Domein krijgt minstens een A score bij de [SSL Labs server test](https://www.ssllabs.com/ssltest)
-- [ ] Gebruik van DNS CAA
-- [ ] Iedere respons bevat een Strict-Transport-Security header
+- [x] HTTP requests worden geredirect naar HTTPS
+- [x] Het gebruikte domein zal in de HSTS preload list staan
+- [x] Domein krijgt minstens een A score bij de [SSL Labs server test](https://www.ssllabs.com/ssltest)
+- [x] Gebruik van DNS CAA
+- [x] Iedere respons bevat een Strict-Transport-Security header
 
 ## Security
 
-### Sign in
-
-- [ ] Het is mogelijk om het wachtwoord te plakken
-- [ ] Er kan pas ingelogd worden als de gebruiker aangetoond heeft dat hij of zij het email adres opgegeven tijdens registratie onder controle heeft
-- [ ] Het scherm gepresenteerd door de applicatie geeft duidelijk aan of de gebruiker al dan niet aangemeld is
-- [ ] Pas na aanmelden kan de gebruiker zijn of haar gegevens opvragen
-
-### Sign up
-
-- [ ] Alle 'printable' ASCII karakters worden aanvaard in het wachtwoord
-- [ ] Het wachtwoord wordt enkel aanvaard als het minstens 7 karakters bevat
-- [ ] Het is mogelijk om het wachtwoord te plakken (zodat gebruikers een password manager kunnen gebruiken)
-- [ ] Vaak gebruikte wachtwoorden worden geweigerd
-- [ ] De gebruiker moet bij registratie een email adres opgeven
-
----
-
-- [ ] De site zal beveiligd zijn tegen allerlei aanvallen:
-
-- CSRF
-- XSS
-- XSSI
-- Clickjacking
-- SQL injection
-- Command injection
-- HTML injection
-- CSS injection
+- De site zal beveiligd zijn tegen allerlei aanvallen: [source](https://deepurai.medium.com/secure-your-nodejs-applications-d13ef96a3cac)
+- [x] Cross-site Scripting (XSS)
+- [x] HTTP Parameter Pollution attacks (HPP)
+- [x] JSON pollution
+- [x] Sanitizing user data (using Express Mongo Sanitize)
+- [x] CORS
+- [x] DDOS (using Rate limiting)
 
 ### API
 
-- [ ] Elke OPTIONS succesvolle respons bevat minstens de headers Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin en Vary met hun correcte waarden. De waarde van Access-Control-Allow-Origin is de origin van de request. Een ontbrekende, ongeldige of null origin request header resulteert in een error respons
-- [ ] De REST APIs implementeren correcte content negotiation: de content-type van de response komt overeen met het media type met het hoogste gewicht in de Accept header dat wordt aangeboden voor de resource. Indien geen van de media types in de Accept header beschikbaar is, dan stuurt de resource server status code 406 terug
-- [ ] Het application/json media type wordt aangeboden voor alle resources
-- [ ] De API zal de correcte response status codes gebruiken
+- [x] Elke OPTIONS succesvolle respons bevat minstens de headers Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin en Vary met hun correcte waarden. De waarde van Access-Control-Allow-Origin is de origin van de request. Een ontbrekende, ongeldige of null origin request header resulteert in een error respons
+- [x] De REST APIs implementeren correcte content negotiation: de content-type van de response komt overeen met het media type met het hoogste gewicht in de Accept header dat wordt aangeboden voor de resource. Indien geen van de media types in de Accept header beschikbaar is, dan stuurt de resource server status code 406 terug
+- [x] Het application/json media type wordt aangeboden voor alle resources
+- [x] De API zal de correcte response status codes gebruiken
 - [ ] De data, verkrijgbaar via de API, zal enkel via correcte tokens kunnen opgevraagd worden
-- [ ] De data zal enkel beschikbaar zijn van de frontend d.m.v. CORS
+- [x] De data zal enkel beschikbaar zijn van de frontend d.m.v. CORS
 
 ## Functionaliteiten
 
 - [ ] Als streamer en kijker ben ik verplicht te registreren om gebruik te kunnen maken van deze app
-- [ ] Als streamer en kijker ben ik bij de registratie verplicht om mijn Spotify account te linken aan mijn profiel op deze app
+- [x] Als streamer en kijker ben ik bij de registratie verplicht om mijn Spotify account te linken aan mijn profiel op deze app
 - [ ] Als streamer en kijker ben ik verplicht in te loggen na registratie
 - [ ] Als streamer ben ik verplicht om mijn Twitch account te linken aan mijn profiel op deze app
 - [ ] Als kijker heb ik de keuze om mijn Twitch account te linken aan mijn profiel op deze app
