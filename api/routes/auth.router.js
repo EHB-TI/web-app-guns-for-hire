@@ -6,6 +6,7 @@ const successResponse = require('../helpers/success-response')
 const passport = require('passport')
 const initializePassport = require('../config/passport.setup')
 const jwtService = require('../helpers/jwt.service')
+const User = require('../models/user')
 
 initializePassport(passport)
 
@@ -29,18 +30,27 @@ router.get(
 )
 
 router.get(
-  "/twitch/callback", jwtService.authenticateToken,
-  passport.authenticate("twitch", { failureRedirect: "/linktwitch" }), 
-  function(req, res) {
-  // Successful authentication, redirect home.
-  //get user from jout
-  console.log(req.headers);
-  //console.log(jwtService.decodeToken(req.header("bearer")))
-  console.log(req.user);
-  //add to user
-  
-  res.redirect("/");
-});
+  '/twitch/callback',
+  jwtService.authenticateToken,
+  passport.authenticate('twitch', { failureRedirect: '/linktwitch' }),
+  async function (req, res) {
+    // Successful authentication, redirect home.
+    // get user from jwt
+    const tmpToken = req.headers['authorization'].replace('Bearer ', '')
+    const tmpUser = jwtService.decodeToken(tmpToken)
+    const foundUser = await User.updateOne(
+      { email: tmpUser.email },
+      {
+        twitch: {
+          id: req.user.id,
+          diplayName: req.user.displayName,
+          refreshToken: req.user.refreshToken,
+        },
+      }
+    )
+    res.status(200).json(successResponse(res.statusCode, { user: foundUser }))
+  }
+)
 
 router.get('/logout', jwtService.authenticateToken, function (req, res) {
   req.logout()

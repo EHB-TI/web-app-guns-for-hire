@@ -14,7 +14,8 @@
         <v-app>
             <v-main>
                 <v-container>
-                    <h1>Guns for Hire</h1>
+                    <v-btn elevation="2" v-on:click="loginSpotify">Login w Spotify</v-btn>
+                    <v-btn elevation="2" v-on:click="">Link Twitch to account</v-btn>
                 </v-container>
             </v-main>
         </v-app>
@@ -26,6 +27,10 @@
         new Vue({
             el: '#app',
             vuetify: new Vuetify(),
+            methods: {
+                loginSpotify: async (ev) => {
+                }
+            },
         })
     </script>
 </body>
