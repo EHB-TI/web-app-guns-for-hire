@@ -6,29 +6,6 @@ const User = require('../models/user')
 
 
 const initialize = (passport) => {
-  passport.serializeUser(function (user, done) {
-    done(null, user)
-  })
-
-  passport.deserializeUser(function (obj, done) {
-    done(null, obj)
-  })
-
-  passport.use(new twitchStrategy({
-      clientID: process.env.TWITCH_CLIENT_ID,
-      clientSecret: process.env.TWITCH_CLIENT_SECRET,
-      callbackURL: `${
-        process.env.APP_ENV === 'production'
-          ? process.env.APP_URL
-          : process.env.APP_URL + ':' + process.env.APP_PORT
-      }/auth/twitch/callback`,
-      scope: "user_read"
-    },
-    function(accessToken, refreshToken, profile, done) {
-      const user = {refreshToken, profile}
-      done(false, user)
-    }
-  ));
   passport.use(
     new SpotifyStrategy(
       {
@@ -64,6 +41,29 @@ const initialize = (passport) => {
       }
     )
   )
+  passport.use(new twitchStrategy({
+    clientID: process.env.TWITCH_CLIENT_ID,
+    clientSecret: process.env.TWITCH_CLIENT_SECRET,
+    callbackURL: `${
+      process.env.APP_ENV === 'production'
+        ? process.env.APP_URL
+        : process.env.APP_URL + ':' + process.env.APP_PORT
+    }/auth/twitch/callback`,
+    scope: "user_read"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    const user = {refreshToken, profile}
+    done(false, user)
+  }
+));
+
+passport.serializeUser(function (user, done) {
+  done(null, user)
+})
+
+passport.deserializeUser(function (obj, done) {
+  done(null, obj)
+})
 }
 
 module.exports = initialize

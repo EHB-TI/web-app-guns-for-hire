@@ -29,12 +29,13 @@ router.get(
 )
 
 router.get(
-  "/twitch/callback", 
+  "/twitch/callback", jwtService.authenticateToken,
   passport.authenticate("twitch", { failureRedirect: "/linktwitch" }), 
   function(req, res) {
   // Successful authentication, redirect home.
   //get user from jout
-
+  console.log(req.headers);
+  //console.log(jwtService.decodeToken(req.header("bearer")))
   console.log(req.user);
   //add to user
   

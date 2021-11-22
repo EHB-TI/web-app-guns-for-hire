@@ -22,4 +22,7 @@ module.exports = Object.freeze({
       next()
     })
   },
+  decodeToken: (token)=>{
+    return jwt.decode(token);
+  }
 })

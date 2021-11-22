@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     id:{type: String , unique:true},
     diplayName:{type: String},
     refreshToken: { type: String},
-  }
+  },
   role: { type: String, enum: ['watcher', 'streamer'], default: 'watcher' },
 })
 
