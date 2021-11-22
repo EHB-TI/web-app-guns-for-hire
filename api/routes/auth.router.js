@@ -26,6 +26,19 @@ router.get(
   }
 )
 
+router.get(
+  "/twitch/callback", 
+  passport.authenticate("twitch", { failureRedirect: "/linktwitch" }), 
+  function(req, res) {
+  // Successful authentication, redirect home.
+  //get user from jout
+
+  console.log(req.user);
+  //add to user
+  
+  res.redirect("/");
+});
+
 router.get('/logout', function (req, res) {
   req.logout()
   res.redirect('/')

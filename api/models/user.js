@@ -9,6 +9,11 @@ const userSchema = new mongoose.Schema({
     refreshToken: { type: String, required: true },
     currentlyPlayingTrack: {},
   },
+  twitch:{
+    id:{type: String , unique:true},
+    diplayName:{type: String},
+    refreshToken: { type: String},
+  }
 })
 
 module.exports = mongoose.model('User', userSchema)
