@@ -3,9 +3,12 @@ services:
   twitch-radio-api:
     image: guns-for-hire/api
     environment:
-      PORT: ${PORT}
-      URL: ${URL}
+      APP_ENV: ${APP_ENV}
+      APP_PORT: ${APP_PORT}
+      APP_URL: ${APP_URL}
       DB_CONNECT: ${DB_CONNECT}
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
 networks:
   default:
     external: true
