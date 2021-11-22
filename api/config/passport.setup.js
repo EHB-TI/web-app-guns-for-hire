@@ -16,7 +16,11 @@ const initialize = (passport) => {
       {
         clientID: process.env.SPOTIFY_CLIENT_ID,
         clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-        callbackURL: 'http://localhost:' + process.env.APP_PORT + '/auth/spotify/callback',
+        callbackURL: `${
+          process.env.APP_ENV === 'production'
+            ? process.env.APP_URL
+            : process.env.APP_URL + ':' + process.env.APP_PORT
+        }/auth/spotify/callback`,
       },
       function (accessToken, refreshToken, expires_in, profile, done) {
         const user = new User({
