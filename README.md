@@ -32,7 +32,7 @@ Hierdoor luisteren ze de muziek met hun spotify account en wordt er dus niet aan
 - [x] De REST APIs implementeren correcte content negotiation: de content-type van de response komt overeen met het media type met het hoogste gewicht in de Accept header dat wordt aangeboden voor de resource. Indien geen van de media types in de Accept header beschikbaar is, dan stuurt de resource server status code 406 terug
 - [x] Het application/json media type wordt aangeboden voor alle resources
 - [x] De API zal de correcte response status codes gebruiken
-- [ ] De data, verkrijgbaar via de API, zal enkel via correcte tokens kunnen opgevraagd worden
+- [x] De data, verkrijgbaar via de API, zal enkel via correcte tokens kunnen opgevraagd worden
 - [x] De data zal enkel beschikbaar zijn van de frontend d.m.v. CORS
 
 ## Functionaliteiten
@@ -67,7 +67,10 @@ Hierdoor luisteren ze de muziek met hun spotify account en wordt er dus niet aan
 
 # Deployment
 
-_minimally, this section contains a public URL of the app. A description of how your software is deployed is a bonus. Do you do this manually, or did you manage to automate? Have you taken into account the security of your deployment process?_
+De deployment gebeurt via Github Actions (CI/CD).
+
+De app is [hier](https://twitch-radio.xyz) op te vinden.
+De api is [hier](https://api.twitch-radio.xyz) op te vinden.
 
 # _you may want further sections_
 

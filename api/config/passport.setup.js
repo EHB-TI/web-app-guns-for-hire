@@ -40,22 +40,27 @@ const initialize = (passport) => {
             : process.env.APP_URL + ':' + process.env.APP_PORT
         }/auth/spotify/callback`,
       },
-      function (accessToken, refreshToken, expires_in, profile, done) {
-        const user = new User({
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          spotify: {
-            id: profile.id,
-            refreshToken,
-          },
-        })
-        let newUser, error
-        try {
-          newUser = user.save()
-        } catch (err) {
-          error = err
+      async function (accessToken, refreshToken, expires_in, profile, done) {
+        const dbUser = await User.findOne({ email: profile.emails[0].value })
+        if (dbUser !== null) {
+          done(false, dbUser)
+        } else {
+          const user = new User({
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            spotify: {
+              id: profile.id,
+              refreshToken,
+            },
+          })
+          let newUser, error
+          try {
+            newUser = user.save()
+          } catch (err) {
+            error = err
+          }
+          done(error, newUser)
         }
-        done(error, newUser)
       }
     )
   )

@@ -5,6 +5,7 @@ const errorResponse = require('../helpers/error-response')
 const successResponse = require('../helpers/success-response')
 const passport = require('passport')
 const initializePassport = require('../config/passport.setup')
+const jwtService = require('../helpers/jwt.service')
 
 initializePassport(passport)
 
@@ -22,7 +23,8 @@ router.get(
   '/spotify/callback',
   passport.authenticate('spotify', { failureRedirect: '/login' }),
   function (req, res) {
-    res.redirect('/')
+    const token = jwtService.generateAccessToken(req.user)
+    res.status(200).json(successResponse(res.statusCode, { accessToken: token }))
   }
 )
 
@@ -39,9 +41,9 @@ router.get(
   res.redirect("/");
 });
 
-router.get('/logout', function (req, res) {
+router.get('/logout', jwtService.authenticateToken, function (req, res) {
   req.logout()
-  res.redirect('/')
+  res.status(200).json(successResponse(res.statusCode, 'You are logged out successfully'))
 })
 
 module.exports = router
