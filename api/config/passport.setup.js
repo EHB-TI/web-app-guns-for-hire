@@ -25,6 +25,7 @@ const initialize = (passport) => {
       function (accessToken, refreshToken, expires_in, profile, done) {
         const user = new User({
           name: profile.displayName,
+          email: profile.emails[0].value,
           spotify: {
             id: profile.id,
             refreshToken,
