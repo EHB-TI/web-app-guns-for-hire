@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from './useAuth'
+import linkTwitch from './linkTwitch'
+import { loginUrl } from './twitch.js'
 import { makeStyles } from '@material-ui/core/styles'
 import { verifyAuthenticated } from './helper'
 import axios from 'axios'
@@ -38,13 +39,11 @@ const GetMe = async () => {
   })
 }
 
-const linkTwitch = async () => {
-  await axios.get('http://localhost:3001/auth/twitch/callback', {
-    headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
-  })
-}
-
 const Profile = () => {
+  //if clause?
+  //https://dev.twitch.tv/docs/authentication/getting-tokens-oauth#oauth-implicit-code-flow
+  const code = new URLSearchParams(window.location.search).get('code')
+  linkTwitch(code)
   const [auth, setAuth] = useState([])
   const [me, setMe] = useState([])
   useEffect(() => {
@@ -68,7 +67,7 @@ const Profile = () => {
     return (
       <div className={classes.profile}>
         <div>
-          <button onClick={linkTwitch()}>link twitch</button>
+          <a href={loginUrl}>link twitch</a>
         </div>
       </div>
     )

@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     currentlyPlayingTrack: {},
   },
   twitch:{
-    id:{type: String , unique:true},
+    twitchId:{type: String},
     diplayName:{type: String},
     refreshToken: { type: String},
   },
