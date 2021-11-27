@@ -5,7 +5,7 @@ const errorResponse = require('./error-response')
 module.exports = Object.freeze({
   generateAccessToken: (user) => {
     return jwt.sign({ email: user.email, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: '1800s',
+      expiresIn: '30m',
       issuer: process.env.JWT_ISSUER,
       audience: process.env.JWT_AUDIENCE,
     })
@@ -22,7 +22,7 @@ module.exports = Object.freeze({
       next()
     })
   },
-  decodeToken: (token)=>{
-    return jwt.decode(token);
-  }
+  verifyToken: (token) => {
+    return jwt.verify(token, process.env.JWT_SECRET)
+  },
 })

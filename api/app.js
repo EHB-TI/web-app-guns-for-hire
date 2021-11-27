@@ -49,6 +49,7 @@ mongoose
     app.use(express.urlencoded({ extended: true }))
     app.use(morgan('dev'))
 
+    app.use(cors())
     if (environment === 'production') {
       // security
       app.use(helmet())
