@@ -25,10 +25,16 @@ router.post('/spotify', (req, res) => {
       spotifyApi
         .getMe()
         .then(async (me) => {
-          const dbUser = await User.findOne({ email: me.body.email })
+          const dbUser = await User.findOne({
+            email: me.body.email
+          })
+          console.log(dbUser);
           if (dbUser !== null) {
+            console.log("here");
             const token = jwtService.generateAccessToken(dbUser)
-            res.status(200).json(successResponse(res.statusCode, { accessToken: token }))
+            res.status(200).json(successResponse(res.statusCode, {
+              accessToken: token
+            }))
           } else {
             const user = new User({
               name: me.body.display_name,
@@ -45,7 +51,9 @@ router.post('/spotify', (req, res) => {
               error = err
             }
             const token = jwtService.generateAccessToken(newUser)
-            res.status(200).json(successResponse(res.statusCode, { accessToken: token }))
+            res.status(200).json(successResponse(res.statusCode, {
+              accessToken: token
+            }))
           }
         })
         .catch((err) => console.log(err))
@@ -61,8 +69,35 @@ router.post('/twitch', jwtService.authenticateToken, async function (req, res) {
   const resp = await axios.post(
     `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&code=${code}&grant_type=authorization_code&redirect_uri=${process.env.TWITCH_REDIRECT_URL}`
   )
+  console.log(resp.data)
 
-  console.log(resp)
+  const response = await axios.get("https://api.twitch.tv/helix/users", {
+    headers: {
+      Authorization: 'Bearer ' + resp.data.access_token,
+      "Client-Id": process.env.TWITCH_CLIENT_ID
+    }
+  })
+  console.log(response.data.data[0].display_name);
+  const twitchUser = response.data.data[0];
+  const token = req.headers['authorization'].replace('Bearer ', '')
+  try {
+    const jwtObj = jwtService.verifyToken(token)
+    const foundUser = await User.updateOne({
+      email: jwtObj.email
+    }, {
+      role:'streamer',
+      twitch: {
+        id: twitchUser.id,
+        diplayName: twitchUser.display_name,
+        refreshToken: resp.data.refresh_token,
+      },
+    })
+
+    res.status(200).json(successResponse(res.statusCode, {
+      linked: true
+    }))
+  } catch (errors) {}
+
 })
 
 router.post('/token/verify', jwtService.authenticateToken, (req, res) => {
@@ -74,12 +109,16 @@ router.post('/token/verify', jwtService.authenticateToken, (req, res) => {
     const now = new Date(Date.now())
     console.log('now', now.toUTCString())
     console.log('exp', expDate.toUTCString())
-    if (expDate < now) {
-    } else {
-      res.status(200).json(successResponse(res.statusCode, { expired: false }))
+    if (expDate < now) {} else {
+      res.status(200).json(successResponse(res.statusCode, {
+        expired: false
+      }))
     }
   } catch (errors) {
-    res.status(200).json(successResponse(res.statusCode, { expired: true, errors }))
+    res.status(200).json(successResponse(res.statusCode, {
+      expired: true,
+      errors
+    }))
   }
 })
 
@@ -87,10 +126,16 @@ router.get('/me', jwtService.authenticateToken, async (req, res) => {
   const token = req.headers['authorization'].replace('Bearer ', '')
   try {
     const jwtObj = jwtService.verifyToken(token)
-    const dbUser = await User.findOne({ email: jwtObj.email })
-    res.status(200).json(successResponse(res.statusCode, { user: dbUser }))
+    const dbUser = await User.findOne({
+      email: jwtObj.email
+    })
+    res.status(200).json(successResponse(res.statusCode, {
+      user: dbUser
+    }))
   } catch (err) {
-    res.status(406).json(errorResponse(res.statusCode, { err }))
+    res.status(406).json(errorResponse(res.statusCode, {
+      err
+    }))
   }
 })
 

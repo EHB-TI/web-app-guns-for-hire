@@ -10,9 +10,9 @@ const userSchema = new mongoose.Schema({
     currentlyPlayingTrack: {},
   },
   twitch:{
-    twitchId:{type: String},
-    diplayName:{type: String},
-    refreshToken: { type: String},
+    id:{type: String,required:false},
+    diplayName:{type: String,required:false},
+    refreshToken: { type: String,required:false},
   },
   role: { type: String, enum: ['watcher', 'streamer'], default: 'watcher' },
 })
