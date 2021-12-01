@@ -6,11 +6,12 @@ const successResponse = require('../helpers/success-response')
 const jwtService = require('../helpers/jwt.service')
 const User = require('../models/user')
 const spotifyWebApi = require('spotify-web-api-node')
+const axios = require('axios')
 
 const spotifyCredentials = {
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-  redirectUri: 'http://localhost:3000/home/',
+  redirectUri: process.env.SPOTIFY_REDIRECT_URL,
 }
 
 router.post('/spotify', (req, res) => {
@@ -55,62 +56,16 @@ router.post('/spotify', (req, res) => {
     })
 })
 
-router.post('/twitch/callback',async function (req, res) {
-  // Successful authentication, redirect home.
-  // get user from jwt
+router.post('/twitch', jwtService.authenticateToken, async function (req, res) {
   const code = req.body.code
-  const tmpToken = req.headers['authorization'].replace('Bearer ', '')
-  const tmpUser = jwtService.decodeToken(tmpToken)
+  const resp = await axios.post(
+    `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&code=${code}&grant_type=authorization_code&redirect_uri=${process.env.TWITCH_REDIRECT_URL}`
+  )
 
-  axios.get(`https://id.twitch.tv/oauth2/validate`, {headers: { Authorization: 'Bearer ' + code }})
-      .then((response) => {
-        //{
-        //"client_id": "wbmytr93xzw8zbg0p1izqyzzc5mbiz",
-        //" ": "twitchdev",
-        //"scopes": [
-        //  "channel:read:subscriptions"
-        //],
-        //"user_id": "141981764",
-        //"expires_in": 5520838
-      //}
-        /*curl -X GET 'https://api.twitch.tv/helix/users?login=twitchdev' \
--H 'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx' \
--H 'Client-Id: wbmytr93xzw8zbg0p1izqyzzc5mbiz'
-
-{
-  "data": [
-    {
-      "broadcaster_type": "partner",
-      "created_at": "2021-07-30T20:32:28Z",
-      "description": "Supporting third-party developers building Twitch integrations from chatbots to game integrations.",
-      "display_name": "TwitchDev",
-      "id": "141981764",
-      "login": "twitchdev",
-      "offline_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/3f13ab61-ec78-4fe6-8481-8682cb3b0ac2-channel_offline_image-1920x1080.png",
-      "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/8a6381c7-d0c0-4576-b179-38bd5ce1d6af-profile_image-300x300.png",
-      "type": "",
-      "view_count": 6652509
-    }
-  ]
-}*/
-        const foundUser = await User.updateOne(
-          { email: tmpUser.email },
-          {
-            twitch: {
-              id: req.client_id,
-              diplayName: req.user.displayName,
-              refreshToken: req.user.refreshToken,
-            },
-          }
-        )
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  
+  console.log(resp)
 })
 
-router.post('/token/verify', (req, res) => {
+router.post('/token/verify', jwtService.authenticateToken, (req, res) => {
   const token = req.headers['authorization'].replace('Bearer ', '')
   try {
     const jwtObj = jwtService.verifyToken(token)
