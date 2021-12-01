@@ -26,15 +26,17 @@ router.post('/spotify', (req, res) => {
         .getMe()
         .then(async (me) => {
           const dbUser = await User.findOne({
-            email: me.body.email
+            email: me.body.email,
           })
-          console.log(dbUser);
+          console.log(dbUser)
           if (dbUser !== null) {
-            console.log("here");
+            console.log('here')
             const token = jwtService.generateAccessToken(dbUser)
-            res.status(200).json(successResponse(res.statusCode, {
-              accessToken: token
-            }))
+            res.status(200).json(
+              successResponse(res.statusCode, {
+                accessToken: token,
+              })
+            )
           } else {
             const user = new User({
               name: me.body.display_name,
@@ -50,17 +52,18 @@ router.post('/spotify', (req, res) => {
             } catch (err) {
               error = err
             }
-            const token = jwtService.generateAccessToken(newUser)
-            res.status(200).json(successResponse(res.statusCode, {
-              accessToken: token
-            }))
+            const token = jwtService.generateAccessToken(user)
+            res.status(200).json(
+              successResponse(res.statusCode, {
+                accessToken: token,
+              })
+            )
           }
         })
-        .catch((err) => console.log(err))
+        .catch((err) => res.status(400).json(errorResponse(res.statusCode, err)))
     })
     .catch((err) => {
-      console.log(err)
-      res.sendStatus(400)
+      res.status(400).json(errorResponse(res.statusCode, err))
     })
 })
 
@@ -71,33 +74,41 @@ router.post('/twitch', jwtService.authenticateToken, async function (req, res) {
   )
   console.log(resp.data)
 
-  const response = await axios.get("https://api.twitch.tv/helix/users", {
+  const response = await axios.get('https://api.twitch.tv/helix/users', {
     headers: {
       Authorization: 'Bearer ' + resp.data.access_token,
-      "Client-Id": process.env.TWITCH_CLIENT_ID
-    }
+      'Client-Id': process.env.TWITCH_CLIENT_ID,
+    },
   })
-  console.log(response.data.data[0].display_name);
-  const twitchUser = response.data.data[0];
+  console.log(response.data.data[0].display_name)
+  const twitchUser = response.data.data[0]
   const token = req.headers['authorization'].replace('Bearer ', '')
   try {
     const jwtObj = jwtService.verifyToken(token)
-    const foundUser = await User.updateOne({
-      email: jwtObj.email
-    }, {
-      role:'streamer',
-      twitch: {
-        id: twitchUser.id,
-        diplayName: twitchUser.display_name,
-        refreshToken: resp.data.refresh_token,
+    console.log(jwtObj)
+    const foundUser = await User.updateOne(
+      {
+        email: jwtObj.email,
       },
-    })
+      {
+        role: 'streamer',
+        twitch: {
+          id: twitchUser.id,
+          displayName: twitchUser.display_name,
+          refreshToken: resp.data.refresh_token,
+        },
+      }
+    )
 
-    res.status(200).json(successResponse(res.statusCode, {
-      linked: true
-    }))
-  } catch (errors) {}
-
+    res.status(200).json(
+      successResponse(res.statusCode, {
+        linked: true,
+        user: foundUser,
+      })
+    )
+  } catch (errors) {
+    res.status(400).json(errorResponse(res.statusCode, { errors }))
+  }
 })
 
 router.post('/token/verify', jwtService.authenticateToken, (req, res) => {
@@ -109,16 +120,21 @@ router.post('/token/verify', jwtService.authenticateToken, (req, res) => {
     const now = new Date(Date.now())
     console.log('now', now.toUTCString())
     console.log('exp', expDate.toUTCString())
-    if (expDate < now) {} else {
-      res.status(200).json(successResponse(res.statusCode, {
-        expired: false
-      }))
+    if (expDate < now) {
+    } else {
+      res.status(200).json(
+        successResponse(res.statusCode, {
+          expired: false,
+        })
+      )
     }
   } catch (errors) {
-    res.status(200).json(successResponse(res.statusCode, {
-      expired: true,
-      errors
-    }))
+    res.status(200).json(
+      successResponse(res.statusCode, {
+        expired: true,
+        errors,
+      })
+    )
   }
 })
 
@@ -127,15 +143,19 @@ router.get('/me', jwtService.authenticateToken, async (req, res) => {
   try {
     const jwtObj = jwtService.verifyToken(token)
     const dbUser = await User.findOne({
-      email: jwtObj.email
+      email: jwtObj.email,
     })
-    res.status(200).json(successResponse(res.statusCode, {
-      user: dbUser
-    }))
+    res.status(200).json(
+      successResponse(res.statusCode, {
+        user: dbUser,
+      })
+    )
   } catch (err) {
-    res.status(406).json(errorResponse(res.statusCode, {
-      err
-    }))
+    res.status(406).json(
+      errorResponse(res.statusCode, {
+        err,
+      })
+    )
   }
 })
 
