@@ -7,6 +7,7 @@ const successResponse = require('../helpers/success-response')
 // sub routes
 router.use('/auth', require('./auth.router'))
 router.use('/spotify', require('./spotify.router'))
+router.use('/twitch', require('./twitch.router'))
 
 // not found routes
 router.get('*', (req, res) => {
