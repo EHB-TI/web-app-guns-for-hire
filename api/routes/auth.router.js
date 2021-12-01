@@ -28,9 +28,8 @@ router.post('/spotify', (req, res) => {
           const dbUser = await User.findOne({
             email: me.body.email,
           })
-          console.log(dbUser)
+          //console.log(dbUser)
           if (dbUser !== null) {
-            console.log('here')
             const token = jwtService.generateAccessToken(dbUser)
             res.status(200).json(
               successResponse(res.statusCode, {
