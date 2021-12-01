@@ -83,5 +83,5 @@ Indien er wordt geprompt voor een verificatie code bij de login in spotify of tw
 
 # Contacteer ons
 
-Tycho Verstraete: tycho.verstraete@student.ehb.be
-Tim Vandergoten: tim.vandergoten@student.ehb.be
+- Tycho Verstraete: tycho.verstraete@student.ehb.be
+- Tim Vandergoten: tim.vandergoten@student.ehb.be
