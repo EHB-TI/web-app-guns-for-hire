@@ -37,11 +37,10 @@ Hierdoor luisteren ze de muziek met hun spotify account en wordt er dus niet aan
 
 ## Functionaliteiten
 
-- [ ] Als streamer en kijker ben ik verplicht te registreren om gebruik te kunnen maken van deze app
+- [x] Als streamer en kijker ben ik verplicht te registreren om gebruik te kunnen maken van deze app
 - [x] Als streamer en kijker ben ik bij de registratie verplicht om mijn Spotify account te linken aan mijn profiel op deze app
-- [ ] Als streamer en kijker ben ik verplicht in te loggen na registratie
-- [ ] Als streamer ben ik verplicht om mijn Twitch account te linken aan mijn profiel op deze app
-- [ ] Als kijker heb ik de keuze om mijn Twitch account te linken aan mijn profiel op deze app
+- [x] Als streamer en kijker ben ik verplicht in te loggen na registratie
+- [x] Wanneer ik als kijker mijn twitch link aan mijn profiel op deze app, wordt ik een streamer
 - [ ] Als streamer en kijker heb ik de mogelijkheid om streamers op te zoeken aan de hand van zijn/haar username van Twitch
 - [ ] Als streamer en kijker heb ik de mogelijkheid om het profiel van de gevonden streamer te bekijken
 - [ ] Als streamer en kijker heb ik de mogelijkheid om op het profiel van de gevonden streamer het lied waarnaar deze streamer aan het luisteren is af te spelen
@@ -72,6 +71,17 @@ De deployment gebeurt via Github Actions (CI/CD).
 De app is [hier](https://twitch-radio.xyz) op te vinden.
 De api is [hier](https://api.twitch-radio.xyz) op te vinden.
 
-# _you may want further sections_
+# Testen
 
-_especially if the use of your application is not self-evident_
+Om de app te testen hebben we voor 2 accounts gezorgd omdat bij de spotify api in development mode een beperkt aantal accounts aan de api kunnen.
+Indien er wordt geprompt voor een verificatie code bij de login in spotify of twitch, kan je dezelde credentials gebruiken voor outlook.
+
+| Type         | Email                        | Password                          |
+| ------------ | ---------------------------- | --------------------------------- |
+| **Streamer** | softsec.streamer@hotmail.com | [contacteer ons](#contacteer-ons) |
+| **Watcher**  | softsec.watcher@hotmail.com  | [contacteer ons](#contacteer-ons) |
+
+# Contacteer ons
+
+- Tycho Verstraete: tycho.verstraete@student.ehb.be
+- Tim Vandergoten: tim.vandergoten@student.ehb.be
