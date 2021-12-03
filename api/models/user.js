@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
   spotify: {
     id: { type: String, required: true },
     refreshToken: { type: String, required: true },
-    currentlyPlayingTrack: {},
   },
+  currentlyPlayingTrack: {},
   twitch: {
     id: { type: String, required: true, unique: true, default: crypto.randomUUID() },
     displayName: { type: String, required: false },

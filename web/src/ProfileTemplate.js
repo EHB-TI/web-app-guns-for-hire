@@ -82,6 +82,16 @@ class ProfileTemplate extends Component {
     console.log(this.state)
   }
 
+  streamMusic = () => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/spotify/currently-playing`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+      })
+      .then((response) => {
+        console.log(response)
+      })
+  }
+
   render = () => {
     console.log(this.state)
     if (this.state.user !== null) {
@@ -135,7 +145,7 @@ class ProfileTemplate extends Component {
               <div className='spotify'>
                 {this.state.user.email === this.state.me.email ? (
                   this.state.me.role === 'streamer' ? (
-                    <button>stream music</button>
+                    <button onClick={this.streamMusic}>stream music</button>
                   ) : (
                     <a href={loginUrl}>
                       <button>link twitch</button>
