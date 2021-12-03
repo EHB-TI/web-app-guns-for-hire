@@ -1,0 +1,10 @@
+version: '3'
+services:
+  twitch-radio-web:
+    image: guns-for-hire/web
+    environment:
+      REACT_APP_BACKEND_URL: ${REACT_APP_BACKEND_URL}
+networks:
+  default:
+    external: true
+    name: tycho_default

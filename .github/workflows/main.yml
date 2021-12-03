@@ -32,8 +32,6 @@ jobs:
       - name: 'Run tests'
         working-directory: ./api
         run: npm test
-      - name: 'Stop and remove web container'
-        run: docker stop twitch-radio-web && docker rm twitch-radio-web
       - name: 'Build website image'
         working-directory: ./web
         run: docker build . -t guns-for-hire/web
@@ -41,7 +39,7 @@ jobs:
         working-directory: ./api
         run: docker build . -t guns-for-hire/api
       - name: 'Run web container'
-        run: docker run -d --network tycho_default --name twitch-radio-web guns-for-hire/web
+        run: docker-compose --env-file /home/tycho/web/.env up -d
       - name: 'Run api container'
         working-directory: ./api
         run: docker-compose --env-file /home/tycho/.env up -d
