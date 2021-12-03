@@ -28,7 +28,6 @@ router.post('/spotify', (req, res) => {
           const dbUser = await User.findOne({
             email: me.body.email,
           })
-          //console.log(dbUser)
           if (dbUser !== null) {
             const token = jwtService.generateAccessToken(dbUser)
             res.status(200).json(
@@ -40,6 +39,7 @@ router.post('/spotify', (req, res) => {
             const user = new User({
               name: me.body.display_name,
               email: me.body.email,
+              profileImageUrl: me.body.images[0].url,
               spotify: {
                 id: me.body.id,
                 refreshToken: data.body.refresh_token,
@@ -110,7 +110,7 @@ router.post('/twitch', jwtService.authenticateToken, async function (req, res) {
   }
 })
 
-router.post('/token/verify', jwtService.authenticateToken, (req, res) => {
+router.get('/token/verify', jwtService.authenticateToken, (req, res) => {
   const token = req.headers['authorization'].replace('Bearer ', '')
   try {
     const jwtObj = jwtService.verifyToken(token)

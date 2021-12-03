@@ -5,6 +5,7 @@ const crypto = require('crypto')
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  profileImageUrl: { type: String, required: true },
   spotify: {
     id: { type: String, required: true },
     refreshToken: { type: String, required: true },
