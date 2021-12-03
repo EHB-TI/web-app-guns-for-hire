@@ -1,27 +1,45 @@
 import axios from 'axios'
 
 export default class Auth {
-  isAuthenticated = () => {
+  isAuthenticated = async () => {
     if (localStorage.getItem('access_token') === null) {
-      console.log('null')
       return false
     }
 
     const token = localStorage.getItem('access_token')
 
-    axios.get('token/verify', { headers: { Authorization: 'Bearer ' + token } }).then((res) => {
-      const expired = res.data.expired
-
-      return !expired
-    })
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/auth/token/verify`, {
+        headers: { Authorization: 'Bearer ' + token },
+      })
+      return true
+    } catch (error) {
+      return false
+    }
   }
 
-  refreshCurrentToken = () => {}
+  refreshCurrentToken = async () => {
+    const token = localStorage.getItem('access_token')
+    const refreshToken = localStorage.getItem('refresh_token')
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/auth/token/refresh`,
+        { refresh_token: refreshToken },
+        {
+          headers: { Authorization: 'Bearer ' + token },
+        }
+      )
+      localStorage.setItem('access_token', response.data.data.access_token)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   logout = () => {
     console.log('logout')
     if (localStorage.getItem('access_token') !== null) {
       localStorage.removeItem('access_token')
+      window.location.href = '/'
     }
   }
 }

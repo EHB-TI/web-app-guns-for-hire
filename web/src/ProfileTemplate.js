@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import Auth from './Auth'
 import logo from './twitch-radio-logo-neg.png'
+import { loginUrl } from './twitch'
 
 class ProfileTemplate extends Component {
   constructor(props) {
@@ -14,34 +15,47 @@ class ProfileTemplate extends Component {
     }
   }
 
-  componentDidMount = () => {
-    this.setState({ code: new URLSearchParams(window.location.search).get('code') }, () => {
-      if (this.state.code !== null) {
-        axios
-          .post('http://localhost:3001/auth/spotify', { code: this.state.code })
-          .then((response) => {
-            localStorage.setItem('access_token', response.data.data.accessToken)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      }
-    })
+  componentDidMount = async () => {
+    const authenticated = await this.state.auth.isAuthenticated()
+    console.log(authenticated)
+    if (authenticated === false) {
+      window.location.href = '/'
+    }
+
+    this.setState({ code: new URLSearchParams(window.location.search).get('code') })
+    if (this.state.code !== null) {
+      axios
+        .post(
+          `http://localhost:3001/auth/twitch`,
+          { code: this.state.code },
+          { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } }
+        )
+        .then((response) => {
+          if (localStorage.getItem('access_token') !== null) {
+            this.state.auth.refreshCurrentToken()
+            window.location.href = '/profile'
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+
     const token = localStorage.getItem('access_token')
     const streamer = new URLSearchParams(window.location.search).get('streamer')
     axios
-      .get('http://localhost:3001/twitch/findAllStreamers', {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/twitch/findAllStreamers`, {
         headers: { Authorization: 'Bearer ' + token },
       })
       .then((response) => {
-        if (response.data.found) {
+        if (response.data.data.found) {
           this.setState({ streamers: response.data.data.users })
         }
       })
       .catch((error) => console.log(error))
 
     axios
-      .get('http://localhost:3001/auth/me', {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/auth/me`, {
         headers: { Authorization: 'Bearer ' + token },
       })
       .then((response) => {
@@ -57,7 +71,7 @@ class ProfileTemplate extends Component {
     if (streamer !== null) {
       axios
         .post(
-          'http://localhost:3001/twitch/findStreamer',
+          `${process.env.REACT_APP_BACKEND_URL}/twitch/findStreamer`,
           { streamer },
           { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } }
         )
@@ -77,16 +91,15 @@ class ProfileTemplate extends Component {
             <a href='/'>
               <img className='twitch-radio-logo' src={logo} alt='twitch-radio-logo' />
             </a>
-            <form className='search-bar'>
+            <form className='search-bar' action='/streamer'>
               <input
-                autoComplete='off'
-                list=''
+                list='streamers'
                 type='search'
                 name='streamer'
                 placeholder='Search for a streamer by username'
                 id='streamer-search'
               />
-              <datalist>
+              <datalist id='streamers'>
                 {/* FOR LOOP OVER STREAMERS FROM DATABASE */}
                 {this.state.streamers.map((streamer, index) => {
                   return <option value={streamer} />
@@ -124,7 +137,9 @@ class ProfileTemplate extends Component {
                   this.state.me.role === 'streamer' ? (
                     <button>stream music</button>
                   ) : (
-                    <button>link twitch</button>
+                    <a href={loginUrl}>
+                      <button>link twitch</button>
+                    </a>
                   )
                 ) : (
                   <>

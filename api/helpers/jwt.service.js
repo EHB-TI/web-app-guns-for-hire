@@ -10,6 +10,12 @@ module.exports = Object.freeze({
       audience: process.env.JWT_AUDIENCE,
     })
   },
+  generateRefreshToken: (user) => {
+    return jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+      issuer: process.env.JWT_ISSUER,
+      audience: process.env.JWT_AUDIENCE,
+    })
+  },
   authenticateToken: (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]

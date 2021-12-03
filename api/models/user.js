@@ -5,7 +5,7 @@ const crypto = require('crypto')
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  profileImageUrl: { type: String, required: true },
+  profileImageUrl: { type: String, required: false },
   spotify: {
     id: { type: String, required: true },
     refreshToken: { type: String, required: true },
@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
     refreshToken: { type: String, required: false },
   },
   role: { type: String, enum: ['watcher', 'streamer'], default: 'watcher' },
+  refreshToken: { type: String, required: true },
 })
 
 module.exports = mongoose.model('User', userSchema)
