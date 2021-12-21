@@ -10,6 +10,7 @@
   - [Evaluatiecriteria ivm wachtwoorden](#evaluatiecriteria-ivm-wachtwoorden)
   - [Evaluatiecriteria ivm aanmelden](#evaluatiecriteria-ivm-aanmelden)
 - [Threat Model](#threat-model)
+- [Aanbevelingen](#aanbevelingen)
 - [Images](#images)
   - [OWASP ZAP](#owasp-zap)
   - [Snyk](#snyk)
