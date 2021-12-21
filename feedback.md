@@ -167,6 +167,18 @@ Het registratie- en aanmeldproces wordt niet geregeld door de applicatie. Deze v
 
 
 <br><br>
+## Aanbevelingen
+- Om de gegevens van de gebruiker te tonen kan er een Spotify Endpoint gebruikt worden. [meer info](https://developer.spotify.com/documentation/web-api/quick-start/)
+- Om de gebruiker van Spotify uit te loggen kan er verwezen worden naar "https://accounts.spotify.com/en/logout" + de gegevens uit LocalStorage verwijderen
+- De error van search kan mogelijk opgelost worden door enkel te checken dat "this.state.user.profileImageUrl" is ipv te controleren dat dit niet undefined is.
+- Er staan nog verschillende gegevens in de console (waarschijnlijk voor te testen), deze worden best verwijdert voor een productie omgeving.
+- De app wordt gestart als "development", mogelijks wordt er geen build uitgevoerd op de server.
+- Geef elementen van een lijst elk een key attribute in ProfileTemplate.js
+
+![Search error](feedback/images/search_error.png)
+![Dev](feedback/images/dev_server.png)
+
+<br><br>
 ## Images (zie [folder](feedback/images) voor meer)
 ### OWASP ZAP
 ![csp wildcard](feedback/images/zap_csp.png)
