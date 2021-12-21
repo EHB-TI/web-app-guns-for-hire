@@ -1,20 +1,21 @@
 # Feedback
 *by CallbackCats*
 
-- [Testen](#Testen)
-  - [Acceptance criteria](#Acceptance-criteria)
-  - [Evaluatiecriteria ivm beveiliging tegen typische web vulnerabilities](#Evaluatiecriteria-ivm-beveiliging-tegen-typische-web-vulnerabilities)
-  - [Evaluatiecriteria ivm HTTPS](#Evaluatiecriteria-ivm-HTTPS)
-  - [Permissions & rights](#Permissions-en-rights)
-  - [Evaluatiecriteria ivm REST APIs](#Evaluatiecriteria-ivm-REST-APIs)
-  - [Evaluatiecriteria ivm wachtwoorden](#Evaluatiecriteria-ivm-wachtwoorden)
-  - [Evaluatiecriteria ivm aanmelden](#Evaluatiecriteria-ivm-aanmelden)
-- [Threat Model](#Threat-model)
+- [Testen](#testen)
+  - [Acceptance criteria](#acceptance-criteria)
+  - [Evaluatiecriteria ivm beveiliging tegen typische web vulnerabilities](#evaluatiecriteria-ivm-beveiliging-tegen-typische-web-vulnerabilities)
+  - [Evaluatiecriteria ivm HTTPS](#evaluatiecriteria-ivm-https)
+  - [Permissions & rights](#permissions-en-rights)
+  - [Evaluatiecriteria ivm REST APIs](#evaluatiecriteria-ivm-rest-apis)
+  - [Evaluatiecriteria ivm wachtwoorden](#evaluatiecriteria-ivm-wachtwoorden)
+  - [Evaluatiecriteria ivm aanmelden](#evaluatiecriteria-ivm-aanmelden)
+- [Threat Model](#threat-model)
 - [Images](#images)
-  - [OWASP ZAP](#OWASP-ZAP)
-  - [Snyk](#Snyk)
-  - [NPM audit](#NPM-audit)
-  - [Gitleaks](#Gitleaks)
+  - [OWASP ZAP](#owasp-zap)
+  - [Snyk](#snyk)
+  - [NPM audit](#npm-audit)
+  - [Gitleaks](#gitleaks)
+  - [Mozilla Observatory](#mozilla-observatory)
 
 ## Gebruikte tools
 - Gitleaks
@@ -179,7 +180,10 @@ Het registratie- en aanmeldproces wordt niet geregeld door de applicatie. Deze v
 ![Dev](feedback/images/dev_server.png)
 
 <br><br>
-## Images (zie [folder](feedback/images) voor meer)
+## Images
+(zie [folder](feedback/images) voor meer)
+
+
 ### OWASP ZAP
 ![csp wildcard](feedback/images/zap_csp.png)
 ![x content type](feedback/images/zap_x_content_type.png)
