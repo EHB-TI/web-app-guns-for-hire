@@ -148,8 +148,8 @@ Het registratie- en aanmeldproces wordt niet geregeld door de applicatie. Deze v
 ### Evaluatiecriteria ivm aanmelden
 | Criteria | Notes | Passed |
 | :------- | :-----| :----: |
-| een gebruiker moet zich ook kunnen afmelden; |  | ✅ |
-| de applicatie geeft ten alle tijde duidelijk aan of de gebruiker al dan niet aangemeld is; | Bij klikken op Logout button wordt er enkel doorverwezen naar de home pagina. Bij terug op login te klikken wordt er automatisch ingelogd. | ❌ |
+| een gebruiker moet zich ook kunnen afmelden; | Bij klikken op Logout button wordt er enkel doorverwezen naar de home pagina. Bij terug op login te klikken wordt er automatisch ingelogd. | ❌ |
+| de applicatie geeft ten alle tijde duidelijk aan of de gebruiker al dan niet aangemeld is; |  | ✅ |
 | na aanmelden kan de gebruiker zijn of haar gegevens opvragen. | De gegevens die de applicatie bijhoudt kunnen niet bekeken/opgevraagd worden. | ❌ |
 
 #### Opmerkingen
