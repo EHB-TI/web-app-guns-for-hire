@@ -176,6 +176,8 @@ Het registratie- en aanmeldproces wordt niet geregeld door de applicatie. Deze v
 - Er staan nog verschillende gegevens in de console (waarschijnlijk voor te testen), deze worden best verwijdert voor een productie omgeving.
 - De app wordt gestart als "development", mogelijks wordt er geen build uitgevoerd op de server.
 - Geef elementen van een lijst elk een key attribute in ProfileTemplate.js
+- Voeg de CSP header toe, de sites die hier zeker in zullen moeten zijn Spotify, Twitch en jullie API. [meer info](https://www.uriports.com/blog/creating-a-content-security-policy-csp/)
+- De header X-FRAME-OPTIONS wordt aangeraden om op SAMEORIGIN te zetten.
 
 ![Search error](feedback/images/search_error.png)
 ![Dev](feedback/images/dev_server.png)
