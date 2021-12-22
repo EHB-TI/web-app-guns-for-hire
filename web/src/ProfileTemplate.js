@@ -36,7 +36,7 @@ class ProfileTemplate extends Component {
           }
         )
         .then((response) => {
-          if (localStorage.getItem('access_token') !== null) {
+          if (sessionStorage.getItem('access_token') !== null) {
             this.state.auth.refreshCurrentToken()
             window.location.href = '/profile'
           }
@@ -46,7 +46,7 @@ class ProfileTemplate extends Component {
         })
     }
 
-    const token = localStorage.getItem('access_token')
+    const token = sessionStorage.getItem('access_token')
     const streamer = new URLSearchParams(window.location.search).get('streamer')
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/twitch/findAllStreamers`, {

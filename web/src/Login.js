@@ -1,7 +1,22 @@
-import React from 'react'
+import React, { Component } from 'react'
+import Auth from './Auth'
 import { loginUrl } from './spotify'
 
-function Login() {
+class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      auth: new Auth(),
+    }
+  }
+  componentDidMount = async () => {
+    const authenticated = await this.state.auth.isAuthenticated()
+    console.log(authenticated)
+    if (authenticated === true) {
+      window.location.href = '/profile'
+    }
+  }
+  render = () => {
   return (
     <div className='main-wrapper center'>
       <div className='card center flex-column'>
@@ -12,6 +27,7 @@ function Login() {
       </div>
     </div>
   )
+}
 }
 
 export default Login

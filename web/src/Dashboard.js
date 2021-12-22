@@ -19,8 +19,8 @@ class Dashboard extends Component {
             { headers: { Accept: 'application/json' } }
           )
           .then((response) => {
-            localStorage.setItem('access_token', response.data.data.accessToken)
-            localStorage.setItem('refresh_token', response.data.data.refreshToken)
+            sessionStorage.setItem('access_token', response.data.data.accessToken)
+            sessionStorage.setItem('refresh_token', response.data.data.refreshToken)
             window.location.href = '/profile'
           })
           .catch((err) => {
