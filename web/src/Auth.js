@@ -9,8 +9,8 @@ export default class Auth {
     const token = localStorage.getItem('access_token')
 
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/auth/token/verify`, {
-        headers: { Authorization: 'Bearer ' + token },
+      await axios.get(`${process.env.REACT_APP_BACKEND_URL}/auth/token/verify`, {
+        headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
       })
       return true
     } catch (error) {
@@ -26,7 +26,7 @@ export default class Auth {
         `${process.env.REACT_APP_BACKEND_URL}/auth/token/refresh`,
         { refresh_token: refreshToken },
         {
-          headers: { Authorization: 'Bearer ' + token },
+          headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
         }
       )
       localStorage.setItem('access_token', response.data.data.access_token)
@@ -36,7 +36,6 @@ export default class Auth {
   }
 
   logout = () => {
-    console.log('logout')
     if (localStorage.getItem('access_token') !== null) {
       localStorage.removeItem('access_token')
       window.location.href = '/'

@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import Auth from './Auth'
 import logo from './twitch-radio-logo-neg.png'
+import noProfilePic from './no-profile-pic.jpg'
 import { loginUrl } from './twitch'
 
 class ProfileTemplate extends Component {
@@ -17,7 +18,6 @@ class ProfileTemplate extends Component {
 
   componentDidMount = async () => {
     const authenticated = await this.state.auth.isAuthenticated()
-    console.log(authenticated)
     if (authenticated === false) {
       window.location.href = '/'
     }
@@ -26,9 +26,14 @@ class ProfileTemplate extends Component {
     if (this.state.code !== null) {
       axios
         .post(
-          `http://localhost:3001/auth/twitch`,
+          `${process.env.REACT_APP_BACKEND_URL}/auth/twitch`,
           { code: this.state.code },
-          { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } }
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+              Accept: 'application/json',
+            },
+          }
         )
         .then((response) => {
           if (localStorage.getItem('access_token') !== null) {
@@ -45,7 +50,7 @@ class ProfileTemplate extends Component {
     const streamer = new URLSearchParams(window.location.search).get('streamer')
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/twitch/findAllStreamers`, {
-        headers: { Authorization: 'Bearer ' + token },
+        headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
       })
       .then((response) => {
         if (response.data.data.found) {
@@ -56,7 +61,7 @@ class ProfileTemplate extends Component {
 
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/auth/me`, {
-        headers: { Authorization: 'Bearer ' + token },
+        headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' },
       })
       .then((response) => {
         this.setState({ me: response.data.data.user })
@@ -73,19 +78,39 @@ class ProfileTemplate extends Component {
         .post(
           `${process.env.REACT_APP_BACKEND_URL}/twitch/findStreamer`,
           { streamer },
-          { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } }
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+              Accept: 'application/json',
+            },
+          }
         )
         .then((response) => {
           this.setState({ user: response.data.data.user })
         })
     }
-    console.log(this.state)
   }
 
   streamMusic = () => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/spotify/currently-playing`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Accept: 'application/json',
+        },
+      })
+      .then((response) => {
+        console.log(response)
+      })
+  }
+
+  downloadData = () => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/auth/me/download`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Accept: '*/*',
+        },
       })
       .then((response) => {
         console.log(response)
@@ -93,8 +118,8 @@ class ProfileTemplate extends Component {
   }
 
   render = () => {
-    console.log(this.state)
     if (this.state.user !== null) {
+      console.log(this.state)
       return (
         <>
           <nav>
@@ -112,15 +137,16 @@ class ProfileTemplate extends Component {
               <datalist id='streamers'>
                 {/* FOR LOOP OVER STREAMERS FROM DATABASE */}
                 {this.state.streamers.map((streamer, index) => {
-                  return <option value={streamer} />
+                  return <option key={index} value={streamer} />
                 })}
               </datalist>
             </form>
-            <ul>
-              <li>
-                <button onClick={this.state.auth.logout}>Logout</button>
-              </li>
-            </ul>
+            <div className='dropdown'>
+              <a href='/profile'>{this.state.me.name}</a>
+              <div className='dropdown-content'>
+                <span onClick={this.state.auth.logout}>Logout</span>
+              </div>
+            </div>
           </nav>
           <div className='main-wrapper center'>
             <div className='card'>
@@ -130,7 +156,7 @@ class ProfileTemplate extends Component {
                     src={
                       this.state.user.profileImageUrl !== undefined
                         ? this.state.user.profileImageUrl
-                        : ''
+                        : noProfilePic
                     }
                     alt='profile pic'
                   />
@@ -141,14 +167,24 @@ class ProfileTemplate extends Component {
                     ? this.state.user.twitch.displayName
                     : ''}
                 </p>
+                {this.state.user.email === this.state.me.email ? (
+                  <div className='gdpr-buttons'>
+                    <button onClick={this.downloadData}>download my data</button>
+                    <button>remove my account</button>
+                  </div>
+                ) : (
+                  ''
+                )}
               </div>
               <div className='spotify'>
                 {this.state.user.email === this.state.me.email ? (
                   this.state.me.role === 'streamer' ? (
-                    <button onClick={this.streamMusic}>stream music</button>
+                    <button className='stream-button' onClick={this.streamMusic}>
+                      stream music
+                    </button>
                   ) : (
                     <a href={loginUrl}>
-                      <button>link twitch</button>
+                      <button className='twitch-button'>link your twitch</button>
                     </a>
                   )
                 ) : (
