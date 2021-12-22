@@ -15,8 +15,8 @@ class Dashboard extends Component {
         axios
           .post(`${process.env.REACT_APP_BACKEND_URL}/auth/spotify`, { code: this.state.code })
           .then((response) => {
-            localStorage.setItem('access_token', response.data.data.accessToken)
-            localStorage.setItem('refresh_token', response.data.data.refreshToken)
+            sessionStorage.setItem('access_token', response.data.data.accessToken)
+            sessionStorage.setItem('refresh_token', response.data.data.refreshToken)
             window.location.href = '/profile'
           })
           .catch((err) => {

@@ -28,10 +28,10 @@ class ProfileTemplate extends Component {
         .post(
           `http://localhost:3001/auth/twitch`,
           { code: this.state.code },
-          { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } }
+          { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('access_token') } }
         )
         .then((response) => {
-          if (localStorage.getItem('access_token') !== null) {
+          if (sessionStorage.getItem('access_token') !== null) {
             this.state.auth.refreshCurrentToken()
             window.location.href = '/profile'
           }
@@ -41,7 +41,7 @@ class ProfileTemplate extends Component {
         })
     }
 
-    const token = localStorage.getItem('access_token')
+    const token = sessionStorage.getItem('access_token')
     const streamer = new URLSearchParams(window.location.search).get('streamer')
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/twitch/findAllStreamers`, {
@@ -73,7 +73,7 @@ class ProfileTemplate extends Component {
         .post(
           `${process.env.REACT_APP_BACKEND_URL}/twitch/findStreamer`,
           { streamer },
-          { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } }
+          { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('access_token') } }
         )
         .then((response) => {
           this.setState({ user: response.data.data.user })
@@ -85,7 +85,7 @@ class ProfileTemplate extends Component {
   streamMusic = () => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/spotify/currently-playing`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+        headers: { Authorization: `Bearer ${sessionStorage.getItem('access_token')}` },
       })
       .then((response) => {
         console.log(response)
