@@ -4,6 +4,7 @@ import Auth from './Auth'
 import logo from './twitch-radio-logo-neg.png'
 import noProfilePic from './no-profile-pic.jpg'
 import { loginUrl } from './twitch'
+import Footer from './Footer'
 
 class ProfileTemplate extends Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class ProfileTemplate extends Component {
           { code: this.state.code },
           {
             headers: {
-              Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+              Authorization: 'Bearer ' + sessionStorage.getItem('access_token'),
               Accept: 'application/json',
             },
           }
@@ -80,7 +81,7 @@ class ProfileTemplate extends Component {
           { streamer },
           {
             headers: {
-              Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+              Authorization: 'Bearer ' + sessionStorage.getItem('access_token'),
               Accept: 'application/json',
             },
           }
@@ -95,31 +96,59 @@ class ProfileTemplate extends Component {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/spotify/currently-playing`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
           Accept: 'application/json',
         },
       })
       .then((response) => {
-        console.log(response)
+        window.location.reload()
+      })
+      .catch((error) => {
+        alert(
+          'Something went wrong while trying to stream your music. Make sure you are playing music on your spotify account first.'
+        )
       })
   }
 
-  downloadData = () => {
+  copyData = () => {
+    navigator.clipboard.writeText(JSON.stringify(this.state.me))
+    alert('Data copied successfully')
+  }
+
+  deleteAccount = () => {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/auth/me/download`, {
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/auth/me`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-          Accept: '*/*',
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+          Accept: 'application/json',
         },
       })
       .then((response) => {
-        console.log(response)
+        sessionStorage.removeItem('access_token')
+        sessionStorage.removeItem('refresh_token')
+        window.location.reload()
       })
+  }
+
+  stopStream = () => {
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/spotify/currently-playing`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+          Accept: 'application/json',
+        },
+      })
+      .then((response) => {
+        window.location.reload()
+      })
+  }
+
+  reload = () => {
+    this.componentDidMount()
   }
 
   render = () => {
     if (this.state.user !== null) {
-      console.log(this.state)
       return (
         <>
           <nav>
@@ -149,7 +178,7 @@ class ProfileTemplate extends Component {
             </div>
           </nav>
           <div className='main-wrapper center'>
-            <div className='card'>
+            <div className='cool-card'>
               <div className='profile'>
                 <div className='profile-pic'>
                   <img
@@ -169,8 +198,15 @@ class ProfileTemplate extends Component {
                 </p>
                 {this.state.user.email === this.state.me.email ? (
                   <div className='gdpr-buttons'>
-                    <button onClick={this.downloadData}>download my data</button>
-                    <button>remove my account</button>
+                    <button
+                      onClick={this.downloadData}
+                      data-bs-toggle='modal'
+                      data-bs-target='#dataModal'>
+                      download my data
+                    </button>
+                    <button data-bs-toggle='modal' data-bs-target='#deleteAccModal'>
+                      remove my account
+                    </button>
                   </div>
                 ) : (
                   ''
@@ -179,49 +215,118 @@ class ProfileTemplate extends Component {
               <div className='spotify'>
                 {this.state.user.email === this.state.me.email ? (
                   this.state.me.role === 'streamer' ? (
-                    <button className='stream-button' onClick={this.streamMusic}>
-                      stream music
-                    </button>
+                    this.state.me.currentlyPlayingTrack ? (
+                      <>
+                        <button className='stream-button' onClick={this.streamMusic}>
+                          stream new music
+                        </button>
+                        <button className='stream-button' onClick={this.stopStream}>
+                          stop streaming
+                        </button>
+                      </>
+                    ) : (
+                      <button className='stream-button' onClick={this.streamMusic}>
+                        stream music
+                      </button>
+                    )
                   ) : (
                     <a href={loginUrl}>
                       <button className='twitch-button'>link your twitch</button>
                     </a>
                   )
-                ) : (
+                ) : this.state.user.currentlyPlayingTrack ? (
                   <>
                     <h3>Currently listening to...</h3>
-                    <img
-                      className='song-cover'
-                      src='https://i.scdn.co/image/ab67616d0000b273a6bbd9d1d796f76d51f00b8c'
-                      alt='cover'
-                    />
+
                     <div className='song-info'>
-                      <p>artist - song </p>
+                      <iframe
+                        src={this.state.user.currentlyPlayingTrack.uri}
+                        title='this is a unique title'
+                        width='300'
+                        height='380'
+                        frame-border='0'
+                        allowtransparency='true'
+                        allow='encrypted-media'></iframe>
                     </div>
-                    <div className='timeline'>
-                      <div className='time'>
-                        <span id='current-time'>--:--</span>
-                        <span id='total-time'>--:--</span>
-                      </div>
-                      <div className='slide-container'>
-                        <input
-                          disabled
-                          className='slider'
-                          type='range'
-                          min='1'
-                          max='100'
-                          value='50'
-                        />
-                      </div>
-                    </div>
-                    <button className='volume'>
-                      <span className='material-icons'>volume_off</span>
+                    <button className='volume' onClick={this.reload}>
+                      refresh
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p class='mt-5'>The streamer is not currently playing a song.</p>
+                    <button className='volume' onClick={this.reload}>
+                      refresh
                     </button>
                   </>
                 )}
               </div>
             </div>
           </div>
+
+          <div
+            className='modal fade'
+            id='dataModal'
+            tabIndex='-1'
+            aria-labelledby='dataModalLabel'
+            aria-hidden='true'>
+            <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='dataModalLabel'>
+                    My Data
+                  </h5>
+                  <button
+                    type='button'
+                    className='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'></button>
+                </div>
+                <div className='modal-body'>{JSON.stringify(this.state.me)}</div>
+                <div className='modal-footer'>
+                  <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>
+                    Close
+                  </button>
+                  <button type='button' className='btn btn-primary' onClick={this.copyData}>
+                    Copy to clipboard
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className='modal fade'
+            id='deleteAccModal'
+            tabIndex='-1'
+            aria-labelledby='deleteAccModalLabel'
+            aria-hidden='true'>
+            <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='deleteAccModalLabel'>
+                    Alert!
+                  </h5>
+                  <button
+                    type='button'
+                    className='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'></button>
+                </div>
+                <div className='modal-body'>
+                  Are you sure you want to delete all your data from this account?
+                </div>
+                <div className='modal-footer'>
+                  <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>
+                    No
+                  </button>
+                  <button type='button' className='btn btn-primary' onClick={this.deleteAccount}>
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Footer />
         </>
       )
     }

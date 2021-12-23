@@ -82,6 +82,7 @@ router
 router
   .post('/twitch', jwtService.authenticateToken, async function (req, res) {
     const code = req.body.code
+    console.log(code)
     const resp = await axios.post(
       `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&code=${code}&grant_type=authorization_code&redirect_uri=${process.env.TWITCH_REDIRECT_URL}`
     )
@@ -113,7 +114,9 @@ router
               refreshToken: resp.data.refresh_token,
             },
           }
-        )
+        ).catch(function (error) {
+          console.log(error) // Failure
+        })
 
         res.status(200).json(
           successResponse(res.statusCode, {
@@ -208,7 +211,10 @@ router
       const dbUser = await User.findOne({
         email: jwtObj.email,
       })
-      const deletedUser = User.deleteOne({ _id: dbUser._id })
+      console.log(dbUser.email)
+      const deletedUser = User.deleteOne({ email: dbUser.email }).catch(function (error) {
+        console.log(error) // Failure
+      })
       res.status(200).json(
         successResponse(res.statusCode, {
           user: deletedUser,
@@ -220,34 +226,6 @@ router
           err,
         })
       )
-    }
-  })
-  .all(restfulRoute)
-
-router
-  .route('/me/download')
-  .get(jwtService.authenticateToken, async (req, res) => {
-    const token = req.headers['authorization'].replace('Bearer ', '')
-    try {
-      const jwtObj = jwtService.verifyToken(token)
-      const dbUser = await User.findOne({
-        email: jwtObj.email,
-      })
-      fs.writeFile('user.json', JSON.stringify(dbUser), function (err) {
-        if (err) return console.log(err)
-        console.log('File created successfully')
-      })
-      const file = './user.json'
-      res.download(file)
-      fs.unlink(file, (err) => {
-        if (err) {
-          console.log(err)
-          return
-        }
-      })
-    } catch (err) {
-      console.log(err)
-      res.status(406).json(errorResponse(res.statusCode, { err }))
     }
   })
   .all(restfulRoute)

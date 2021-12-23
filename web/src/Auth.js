@@ -36,7 +36,6 @@ export default class Auth {
   }
 
   logout = () => {
-    console.log('logout')
     if (sessionStorage.getItem('access_token') !== null) {
       sessionStorage.removeItem('access_token')
       window.location.href = '/'
