@@ -39,6 +39,7 @@ jobs:
         working-directory: ./api
         run: docker build . -t guns-for-hire/api
       - name: 'Run web container'
+        working-directory: ./web
         run: docker-compose --env-file /home/tycho/web/.env up -d
       - name: 'Run api container'
         working-directory: ./api
