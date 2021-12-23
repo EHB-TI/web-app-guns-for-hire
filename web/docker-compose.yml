@@ -2,7 +2,7 @@ version: '3'
 services:
   twitch-radio-web:
     image: guns-for-hire/web
-    environment:
+    args:
       REACT_APP_BACKEND_URL: ${REACT_APP_BACKEND_URL}
       REACT_APP_TWITCH_REDIRECT_URL: ${REACT_APP_TWITCH_REDIRECT_URL}
       REACT_APP_SPOTIFY_REDIRECT_URL: ${REACT_APP_SPOTIFY_REDIRECT_URL}
