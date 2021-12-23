@@ -14,7 +14,7 @@ RUN npm install serve -g
 COPY . .
 
 # environment variables
-COPY ~/web/.env .env
+VOLUME [ "/home/tycho/web/" ]
 
 # build app
 RUN npm run build
