@@ -4,6 +4,8 @@ services:
     image: guns-for-hire/web
     environment:
       REACT_APP_BACKEND_URL: ${REACT_APP_BACKEND_URL}
+      REACT_APP_TWITCH_REDIRECT_URL: ${REACT_APP_TWITCH_REDIRECT_URL}
+      REACT_APP_SPOTIFY_REDIRECT_URL: ${REACT_APP_SPOTIFY_REDIRECT_URL}
 networks:
   default:
     external: true

@@ -13,10 +13,14 @@ class Dashboard extends Component {
     this.setState({ code: new URLSearchParams(window.location.search).get('code') }, () => {
       if (this.state.code !== null && this.state.code !== '') {
         axios
-          .post(`${process.env.REACT_APP_BACKEND_URL}/auth/spotify`, { code: this.state.code })
+          .post(
+            `${process.env.REACT_APP_BACKEND_URL}/auth/spotify`,
+            { code: this.state.code },
+            { headers: { Accept: 'application/json' } }
+          )
           .then((response) => {
-            localStorage.setItem('access_token', response.data.data.accessToken)
-            localStorage.setItem('refresh_token', response.data.data.refreshToken)
+            sessionStorage.setItem('access_token', response.data.data.accessToken)
+            sessionStorage.setItem('refresh_token', response.data.data.refreshToken)
             window.location.href = '/profile'
           })
           .catch((err) => {

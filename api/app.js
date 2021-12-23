@@ -19,17 +19,6 @@ const url = process.env.APP_URL || 'http://localhost'
 const environment = process.env.APP_ENV || 'development'
 const localDb = 'mongodb://localhost/my_database'
 
-const whitelist = [process.env.FRONTEND_URL]
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-}
-
 console.log('Environment', environment)
 
 console.log(`⌛ Connecting to database...`)
@@ -67,7 +56,6 @@ mongoose
         max: 100, // limit each IP to 100 requests per windowMs
       })
       app.use(limiter)
-      app.use(cors(corsOptions))
     }
 
     // routes

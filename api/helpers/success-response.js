@@ -5,7 +5,8 @@ module.exports = function (statusCode, data) {
     case 200:
       message = 'OK'
       break
-
+    case 201:
+      message = 'Created'
     default:
       break
   }
