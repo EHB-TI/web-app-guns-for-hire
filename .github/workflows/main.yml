@@ -42,4 +42,4 @@ jobs:
         run: docker-compose --env-file /home/tycho/web/.env up -d
       - name: 'Run api container'
         working-directory: ./api
-        run: docker-compose --env-file /home/tycho/.env up -d
+        run: docker-compose --env-file /home/tycho/api/.env up -d

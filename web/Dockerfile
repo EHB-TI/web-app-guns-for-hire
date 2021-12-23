@@ -7,11 +7,17 @@ WORKDIR /usr/src/web
 # install app dependencies
 COPY package.json ./
 RUN npm install
-RUN npm install react-scripts@3.4.1 -g 
+RUN npm install react-scripts@5.0.0 -g
+RUN npm install serve -g
 
 # add app
 COPY . .
 
+# build app
+RUN npm run build
+
+# expose port
 EXPOSE 3000
+
 # start app
-CMD ["npm", "start"]
+CMD ["serve", "-s", "build"]

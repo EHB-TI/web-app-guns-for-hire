@@ -1,5 +1,5 @@
 import './App.css'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { Helmet } from 'react-helmet'
 import Login from './Login'
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom'
@@ -18,10 +18,7 @@ class App extends Component {
     return (
       <div className='App'>
         <Helmet>
-          <meta
-            http-equiv='Content-Security-Policy'
-            content="default-src 'self' twitch-radio.xyz *.twitch-radio.xyz localhost:3001 *.spotify.com; script-src cdn.jsdelivr.net 'unsafe-inline' 'sha256-B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8='; img-src *; script-src-elem cdn.jsdelivr.net; frame-src *.spotify.com"
-          />
+          <meta http-equiv='Content-Security-Policy' content={process.env.REACT_APP_CSP} />
           <link
             href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css'
             rel='stylesheet'
